@@ -57,7 +57,7 @@ class table:
 
     def exercice(self):
         table.reset(self.cur, self.con) # reset de la table
-        # table.afficher_table(self)       (anectotique, pour le debogage)
+        table.afficher_table(self)       # (anectotique, pour le debogage)
         start = time()    #on prend la valaure du temps pour avoir le temps total
         nb_correct = 0
         nb_questions = 0
