@@ -3,25 +3,26 @@ from time import time
 from random import shuffle, randint
 from tkinter import ttk
 import tkinter as tk
-class table:
+class table():
 
 
 
     def __init__(self, nom_fenetre, nom_db, nom_tableau):
+
+
         self.fenetre = tk.Tk()
         self.fenetre.title(nom_fenetre)
         self.fenetre.geometry("600x400")
-        # Créer une barre de menu
+        # création d'un menu déroulant avec les différentes fonctions
         self.barre_menu = tk.Menu(self.fenetre)
 
-        menu_fichier = tk.Menu(self.barre_menu, tearoff=0)
-        self.barre_menu.add_cascade(label="options", menu=menu_fichier)
-        menu_fichier.add_command(label="test", command=self.afficher_message)
-        menu_fichier.add_command(label="afficher voc", command=self.afficher_table)
-
-        menu_fichier.add_command(label="ajouter voc", command=self.ajouter_voc)
-        menu_fichier.add_separator() 
-        menu_fichier.add_command(label="Exit", command=self.quitter_application)
+        self.menu_fichier = tk.Menu(self.barre_menu, tearoff=0)
+        self.barre_menu.add_cascade(label="options", menu=self.menu_fichier)
+        self.menu_fichier.add_command(label="test", command=self.afficher_message)
+        self.menu_fichier.add_command(label="afficher voc", command=self.afficher_table)
+        self.menu_fichier.add_command(label="ajouter voc", command=self.ajouter_voc)
+        self.menu_fichier.add_separator() 
+        self.menu_fichier.add_command(label="Exit", command=self.quitter_application)
 
         # Configurer la fenêtre pour utiliser la barre de menu
         self.fenetre.config(menu=self.barre_menu)
@@ -48,20 +49,19 @@ class table:
         self.con.close()
 
     # fonctions menu déroulant
-    def afficher_message(self):
+    def afficher_message(self): # deboggage et tests
         print(f"manger ")
     def quitter_application(self):
         self.fenetre.destroy()
     
     # relatif a l'ajout de choses dans la table
-    def recuperer_input(self, event=None):
-        self.info=self.info_demande.get()
+    def recuperer_input(self, event=None): # recupere l'input dans le champ
+        self.info=self.info_demande.get() 
         self.data.append(self.info)
         self.info_demande.set("")
         print(self.data)
-        
+        # toutes les 4 entrées, il entre les données dans la table
         if len(self.data)==0:
-
             self.name_label.config(text="trad")
         elif len(self.data)==1:
             self.name_label.config(text="present")
@@ -74,35 +74,36 @@ class table:
             f"INSERT INTO {self.nom_tableau} (trad, present, preterit, participe_passe) VALUES( ?, ?, ?, ?)",  self.data)
             self.data = []
             self.name_label.config(text="trad")
-    def fin_du_voc(self):
+    def fin_du_voc(self): # fonction appelée pour finir d'entrer du voc
         self.fenetre.unbind('<Return>')
         self.name_label.destroy()
         self.name_entry.destroy()
         self.button_fin.destroy()
+
+
+
+    
     def ajouter_voc(
         self
     ):  # crée une ligne dans la table verbe irregulier contenant la traduction,
       # le présent, le prétérit, le participe passé
-        if list_voc.winfo_exists():
-            list_voc.destroy()
-        self.fenetre.bind('<Return>', self.recuperer_input)
+        self.tout_detruire() # enleve tout ce qu'il y a ds la fenetre
+        self.fenetre.bind('<Return>', self.recuperer_input)  
         self.data = []
         self.info_demande = tk.StringVar()
-        # present = tk.StringVar()
-        # preterit = tk.StringVar()
-        # participe_passe = tk.StringVar()
-        # domaines = ['traduction', 'present','preterit', 'participe passe']
-        # for i in domaines:
         self.phase = 'trad'
-        self.name_label = tk.Label(self.fenetre, text = self.phase, font=('calibre',10, 'bold'))
-        self.name_entry = tk.Entry(self.fenetre, textvariable = self.info_demande, font=('calibre',10,'normal'))
-        self.button_fin = tk.Button(self.fenetre, text = 'fin',command=self.fin_du_voc)
+        self.name_label = tk.Label(self.fenetre, text = self.phase, font=('calibre',10, 'bold'))  # creation du label, du champ d'entré et du 
+        self.name_entry = tk.Entry(self.fenetre, textvariable = self.info_demande, font=('calibre',10,'normal')) # button ainsi que leur package
+        self.button_fin = tk.Button(self.fenetre, text = 'fin',command=self.fin_du_voc) # en grille
         self.name_label.grid(row=0,column=0)
         self.name_entry.grid(row=1,column=0)
         self.button_fin.grid(row=2,column=1)
 
 
+
+
     def afficher_table(self):  # permet d'afficher toute les lignes de la table
+        self.tout_detruire()
         list_voc = tk.Listbox(self.fenetre)
         list_voc.pack(side = tk.LEFT, fill = tk.BOTH) 
         for row in self.cur.execute(
@@ -130,5 +131,15 @@ class table:
                 f"UPDATE {self.nom_tableau} SET is_found = 0 WHERE id = ?", (row[0],)
             )
             self.con.commit()
+    
+
+
+    # fonctions générales    
+    def tout_detruire(self):  # pour detruire tout ce quil y a dans la fenetre (hormis le menu)
+        for widget in self.fenetre.winfo_children():
+            if widget not in [self.menu_fichier]:
+                widget.destroy()
+
+
 
 test = table('voc', 'test1', 'test2')
