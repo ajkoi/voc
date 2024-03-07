@@ -72,6 +72,7 @@ class table():
         if len(self.data)==4:
             self.cur.execute(
             f"INSERT INTO {self.nom_tableau} (trad, present, preterit, participe_passe) VALUES( ?, ?, ?, ?)",  self.data)
+            self.con.commit()
             self.data = []
             self.name_label.config(text="trad")
     def fin_du_voc(self): # fonction appelée pour finir d'entrer du voc
@@ -97,19 +98,26 @@ class table():
         self.button_fin = tk.Button(self.fenetre, text = 'fin',command=self.fin_du_voc) # en grille
         self.name_label.grid(row=0,column=0)
         self.name_entry.grid(row=1,column=0)
-        self.button_fin.grid(row=2,column=1)
+        self.button_fin.grid(row=2,column=0)
 
 
 
 
     def afficher_table(self):  # permet d'afficher toute les lignes de la table
         self.tout_detruire()
-        list_voc = tk.Listbox(self.fenetre)
-        list_voc.pack(side = tk.LEFT, fill = tk.BOTH) 
+
+        self.scrollbar = ttk.Scrollbar(self.fenetre, orient="vertical")
+        self.list_voc = tk.Listbox(self.fenetre, yscrollcommand=self.scrollbar.set)
+        self.scrollbar.config(command=self.list_voc.yview)
+        self.list_voc.pack(side="left", fill="both", expand=True)
+        self.scrollbar.pack(side="right", fill="y")
+        self.list_voc.pack(side = tk.LEFT, fill = tk.BOTH) 
         for row in self.cur.execute(
             f"SELECT id, trad, present, preterit, participe_passe, is_found FROM {self.nom_tableau}"
         ):
+            subrow = [row[1], row[2], row[3], row[4]]
             print(row)
+            self.list_voc.insert(tk.END, subrow) 
 
 
 
@@ -136,8 +144,11 @@ class table():
 
     # fonctions générales    
     def tout_detruire(self):  # pour detruire tout ce quil y a dans la fenetre (hormis le menu)
+        self.fenetre.unbind('<Return>')
+
         for widget in self.fenetre.winfo_children():
-            if widget not in [self.menu_fichier]:
+
+            if widget not in [self.barre_menu]:
                 widget.destroy()
 
 
