@@ -4,5 +4,6 @@ Documentation only in french
 
 coming soon : 
 
-german irregular verbs
-other vocabulary (words)
+> german irregular verbs
+> other vocabulary (words)
+> GUI
