@@ -2,8 +2,8 @@
 Documentation only in french
 
 
-coming soon : 
+Coming soon : 
 
-> german irregular verbs
-> other vocabulary (words)
-> GUI
+- german irregular verbs
+- other vocabulary (words)
+- GUI
