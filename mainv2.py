@@ -5,7 +5,7 @@ from tkinter import ttk
 import tkinter as tk
 from database import *
 
-
+# USELESS FILE
 
 
 
@@ -44,14 +44,13 @@ def fin_du_voc(): # fonction appelée pour finir d'entrer du voc
 
 
 
-def ajouter_voc(
-    
-):  # crée une ligne dans la table verbe irregulier contenant la traduction,
+def ajouter_voc():  # crée une ligne dans la table verbe irregulier contenant la traduction,
     # le présent, le prétérit, le participe passé
     tout_detruire() # enleve tout ce qu'il y a ds la fenetre
     fenetre.bind('<Return>', recuperer_input)  
     data = []
-    global info_demande = tk.StringVar()
+    global info_demande 
+    info_demande = tk.StringVar()
     phase = 'trad'
     name_label = tk.Label(fenetre, text = phase, font=('calibre',10, 'bold'))  # creation du label, du champ d'entré et du 
     name_entry = tk.Entry(fenetre, textvariable = info_demande, font=('calibre',10,'normal')) # button ainsi que leur package
