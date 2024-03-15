@@ -3,7 +3,6 @@ from tkinter import messagebox
 import tkinter as tk
 import os
 import database as db
-from graphical_interface import *
 # from database import *
 
 def quit_application() -> None:
@@ -86,7 +85,10 @@ def create_form(root, fields) -> list:
         entry.bind("<Return>", lambda event, entry_list=entry_list, index=index: on_enter(event, entry_list, index))
         entry_list.append(entry)
     return entry_list
-
+def add_vocab() -> None:
+    
+    table_exercice = db.Table(fr".\vocabulary\{selected_file}") # * to have the whole path
+    fields_of_exercice = create_form(fenetre, [i[1] for i in table_exercice.select_columns()[1:-1]])
 def exercice() -> None:
     # print(selected_file)
     table_exercice = db.Table(fr".\vocabulary\{selected_file}") # * to have the whole path
