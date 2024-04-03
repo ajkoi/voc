@@ -3,6 +3,9 @@ from tkinter import messagebox
 import tkinter as tk
 import os
 import database as db
+from random import shuffle, randint
+from time import time
+
 # from database import *
 
 def quit_application() -> None:
@@ -52,25 +55,34 @@ def confirm_selection() -> None:
         selected_file = fr"{list_files.get(selection[0])}"
         return_to_homepage()
     else:
-        tk.messagebox.showwarning("warning", "please select a database")
+        messagebox.showwarning("warning", "please select a database")
     
 
-def on_enter(event, entry_list, index):
+def on_enter(event, entry_list: list[tk.Entry], index):
     """Gère l'appui sur la touche Entrée dans un champ de saisie."""
     if index + 1 < len(entry_list):
-        # Déplace le focus au champ suivant
-        entry_list[index + 1].focus_set()
+            # entry_list[index + 1].focus_set()
+        # Déplace le focus au champ suivant si le champ n'est pas en readonly
+
+        # 
+            try :
+                if entry_list[index + 1]["state"] != "readonly":
+                    entry_list[index + 1].focus_set()
+                
+                elif entry_list[index + 1]["state"] == "readonly":
+                    entry_list[index + 2].focus_set()
+            except IndexError:
+                entry_list[0].focus_set()
+
+            # match index:
+            #     case :
+            #         entry_list[index + 2].focus_set()
+                  
+            
+
     else:
         # Enregistre les données et réinitialise tous les champs
         save_data_and_reset_fields(entry_list)
-
-def save_data_and_reset_fields(entry_list) -> None:
-    """Enregistre les données et réinitialise tous les champs."""
-    data = [entry.get() for entry in entry_list]
-    print("Données enregistrées :", data)
-    for entry in entry_list:
-        entry.delete(0, tk.END)
-    entry_list[0].focus_set()
 
 def create_form(root, fields) -> list:
     """Crée le formulaire avec les champs de saisie."""
@@ -84,15 +96,44 @@ def create_form(root, fields) -> list:
         # Bind la touche Entrée à l'action on_enter pour chaque champ
         entry.bind("<Return>", lambda event, entry_list=entry_list, index=index: on_enter(event, entry_list, index))
         entry_list.append(entry)
+
+
     return entry_list
-def add_vocab() -> None:
+
+
+def save_data_and_reset_fields(entry_list) -> None:
+    """Enregistre les données et réinitialise tous les champs."""
+    global data
+    data = [entry.get() for entry in entry_list]
+    print("Données enregistrées :", data)
+    for entry in entry_list:
+        entry.delete(0, tk.END)
+    entry_list[0].focus_set()
+
+# def add_vocab() -> None:
     
-    table_exercice = db.Table(fr".\vocabulary\{selected_file}") # * to have the whole path
-    fields_of_exercice = create_form(fenetre, [i[1] for i in table_exercice.select_columns()[1:-1]])
+#     table_exercice = db.Table(fr".\vocabulary\{selected_file}") # * to have the whole path
+#     fields_of_exercice = create_form(fenetre, [i[1] for i in table_exercice.select_columns()[1:-1]])
+
+
 def exercice() -> None:
     # print(selected_file)
-    table_exercice = db.Table(fr".\vocabulary\{selected_file}") # * to have the whole path
-    fields_of_exercice = create_form(fenetre, [i[1] for i in table_exercice.select_columns()[1:-1]])
+    if selected_file != '[no selected file]':
+        table_exercice = db.Table(fr".\vocabulary\{selected_file}") # * to have the whole path
+        fields_of_exercice = create_form(fenetre, [i[1] for i in table_exercice.select_columns()[1:-1]])
+    else:
+        messagebox.showwarning("warning", "please select a database")
+    words = table_exercice.select_isfound(0)
+    shuffle(words)
+    nb_questions = 0
+    for entry in words:
+        nb_questions +=1
+        which_word_is_show = randint(1, len(entry)-2)
+        fields_of_exercice[which_word_is_show].insert(0, entry[which_word_is_show])
+        fields_of_exercice[which_word_is_show].configure(state="readonly")
+            
+
+        
 
     
 

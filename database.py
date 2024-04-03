@@ -33,13 +33,13 @@ class Table():
             self.con.commit()
 
     
-    def select_isfound(self, is_found_value) -> list:  
+    def select_isfound(self, is_found_value: int) -> list:  
         self.cur.execute(
             f"SELECT id, trad, present, preterit, participe_passe FROM {self.table_name} WHERE is_found == {is_found_value}"
         )
         return self.cur.fetchall()
     
-    def add_vocabulary(self, vocabulary):
+    def add_vocabulary_four_fields(self, vocabulary: list[str, str, str, str]):
         self.cur.execute(
             f"INSERT INTO {self.table_name} (trad, present, preterit, participe_passe) VALUES( ?, ?, ?, ?)", vocabulary,)
         self.con.commit()
