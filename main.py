@@ -6,11 +6,9 @@ import database as db
 from random import shuffle, randint
 from time import time
 
-# from database import *
-
+#! Important fonctions (often used)
 def quit_application() -> None:
     fenetre.destroy()
-
 def tout_detruire() -> None:  # pour detruire tout ce quil y a dans la fenetre (hormis le menu)
     fenetre.unbind('<Return>')
 
@@ -18,8 +16,17 @@ def tout_detruire() -> None:  # pour detruire tout ce quil y a dans la fenetre (
 
         if widget not in [barre_menu]:
             widget.destroy()
+def return_to_homepage() -> None:
+    tout_detruire()
 
+    button_select_table = tk.Button(fenetre, command=select_table, text="select table")
+    button_exercice = tk.Button(fenetre, command=exercice, text="start the exercise")
+    label_selected_file = tk.Label(fenetre, text=f"The selected table is {selected_file}", font=('calibre',10))
+    button_select_table.grid(row=1, column=0)
+    label_selected_file.grid(row=0, column=0)
+    button_exercice.grid(row=2, column=0)
 
+#! Table selection
 def select_table() -> None:
     tout_detruire()
     confirm_btn = tk.Button(fenetre, text="Confirm selection", command=confirm_selection)
@@ -37,17 +44,6 @@ def select_table() -> None:
         for name in files:
             # print(os.path.join(path, name))
             list_files.insert(tk.END, os.path.join(path, name)[13:])
-
-def return_to_homepage() -> None:
-    tout_detruire()
-
-    button_select_table = tk.Button(fenetre, command=select_table, text="select table")
-    button_exercice = tk.Button(fenetre, command=exercice, text="start the exercise")
-    label_selected_file = tk.Label(fenetre, text=f"The selected table is {selected_file}", font=('calibre',10))
-    button_select_table.grid(row=1, column=0)
-    label_selected_file.grid(row=0, column=0)
-    button_exercice.grid(row=2, column=0)
-
 def confirm_selection() -> None:
     selection = list_files.curselection()
     if selection:
@@ -58,13 +54,9 @@ def confirm_selection() -> None:
         messagebox.showwarning("warning", "please select a database")
     
 
-def on_enter(event, entry_list: list[tk.Entry], index):
-    """Gère l'appui sur la touche Entrée dans un champ de saisie."""
+def on_enter(event, entry_list: list[tk.Entry], index) -> None:
     if index + 1 < len(entry_list):
-            # entry_list[index + 1].focus_set()
-        # Déplace le focus au champ suivant si le champ n'est pas en readonly
 
-        # 
             try :
                 if entry_list[index + 1]["state"] != "readonly":
                     entry_list[index + 1].focus_set()
@@ -73,15 +65,7 @@ def on_enter(event, entry_list: list[tk.Entry], index):
                     entry_list[index + 2].focus_set()
             except IndexError:
                 entry_list[0].focus_set()
-
-            # match index:
-            #     case :
-            #         entry_list[index + 2].focus_set()
-                  
-            
-
     else:
-        # Enregistre les données et réinitialise tous les champs
         save_data_and_reset_fields(entry_list)
 
 def create_form(root, fields) -> list:
@@ -100,8 +84,9 @@ def create_form(root, fields) -> list:
 
     return entry_list
 
-
 def save_data_and_reset_fields(entry_list) -> None:
+
+
     """Enregistre les données et réinitialise tous les champs."""
     global data
     data = [entry.get() for entry in entry_list]
@@ -110,27 +95,93 @@ def save_data_and_reset_fields(entry_list) -> None:
         entry.delete(0, tk.END)
     entry_list[0].focus_set()
 
-# def add_vocab() -> None:
+
+
+#! Fonctions for exercise
+#! EXERCISE
+#! EXERCISE
+#! EXERCISE
     
-#     table_exercice = db.Table(fr".\vocabulary\{selected_file}") # * to have the whole path
-#     fields_of_exercice = create_form(fenetre, [i[1] for i in table_exercice.select_columns()[1:-1]])
 
-
+nb_questions = 0
 def exercice() -> None:
+    global table_exercice, fields_of_exercice
     # print(selected_file)
     if selected_file != '[no selected file]':
         table_exercice = db.Table(fr".\vocabulary\{selected_file}") # * to have the whole path
-        fields_of_exercice = create_form(fenetre, [i[1] for i in table_exercice.select_columns()[1:-1]])
+        fields_of_exercice = exo_create_form(fenetre, [i[1] for i in table_exercice.select_columns()[1:-1]])
     else:
         messagebox.showwarning("warning", "please select a database")
     words = table_exercice.select_isfound(0)
     shuffle(words)
-    nb_questions = 0
-    for entry in words:
-        nb_questions +=1
-        which_word_is_show = randint(1, len(entry)-2)
-        fields_of_exercice[which_word_is_show].insert(0, entry[which_word_is_show])
-        fields_of_exercice[which_word_is_show].configure(state="readonly")
+    exo_choose_a_word_and_make_a_field_readonly(table=table_exercice, fields=fields_of_exercice)
+
+def exo_on_enter(event, entry_list: list[tk.Entry], index) -> None:
+    if index + 1 < len(entry_list):
+
+            try :
+                if entry_list[index + 1]["state"] != "readonly":
+                    entry_list[index + 1].focus_set()
+                
+                elif entry_list[index + 1]["state"] == "readonly":
+                    entry_list[index + 2].focus_set()
+            except IndexError:
+                entry_list[0].focus_set()
+                exo_save_data_and_reset_fields(entry_list)
+    else:
+        exo_save_data_and_reset_fields(entry_list)
+
+def exo_create_form(root, fields) -> list:
+    """Crée le formulaire avec les champs de saisie."""
+    tout_detruire()
+    entry_list = []
+    for index, field in enumerate(fields):
+        label = tk.Label(root, text=field)
+        label.pack()
+        entry = tk.Entry(root)
+        entry.pack()
+        # Bind la touche Entrée à l'action on_enter pour chaque champ
+        entry.bind("<Return>", lambda event, entry_list=entry_list, index=index: exo_on_enter(event, entry_list, index))
+        entry_list.append(entry)
+
+
+    return entry_list
+def exo_save_data_and_reset_fields(entry_list) -> None:
+    global data
+    data = [entry.get() for entry in entry_list]
+    voc_of_first_line_of_words = [word for word in words[0][1:len(words)-1]]
+    if data == voc_of_first_line_of_words:
+        print("c'est bon")
+        print(words[0][0])
+        print(type(words[0][0]))
+        table_exercice.update_isfound(value=1, where=words[0][0])
+    else :
+        print("pabon, cetait :")
+        print(words[0][1:len(words)-1])
+        print("tu a mis")
+        print(data)
+    for entry in entry_list:
+        entry.delete(0, tk.END)
+    entry_list[0].focus_set()
+    exo_choose_a_word_and_make_a_field_readonly(table=table_exercice, fields=fields_of_exercice)
+
+def exo_choose_a_word_and_make_a_field_readonly(table: db.Table, fields : list[tk.Entry]):
+    global words, nb_questions
+    for field in fields:
+        if field["state"] == "readonly":
+            field.configure(state='normal')
+    for entry in fields:
+        entry.delete(0, tk.END)
+    nb_questions +=1
+    words = table.select_isfound(0)
+    shuffle(words)
+    which_word_is_show = randint(1, len(words[0])-2)
+    fields[which_word_is_show-1].insert(0, words[0][which_word_is_show]) # we need to take -1 because
+    fields[which_word_is_show-1].configure(state="readonly") # the fields start at 0
+
+
+
+
             
 
         

@@ -32,14 +32,16 @@ class Table():
             )
             self.con.commit()
 
-    
+    def update_isfound(self, value :int, where :int) -> None:
+        self.cur.execute(f"UPDATE {self.table_name} SET is_found = {value} WHERE id = ?", where)
+
     def select_isfound(self, is_found_value: int) -> list:  
         self.cur.execute(
             f"SELECT id, trad, present, preterit, participe_passe FROM {self.table_name} WHERE is_found == {is_found_value}"
         )
         return self.cur.fetchall()
     
-    def add_vocabulary_four_fields(self, vocabulary: list[str, str, str, str]):
+    def add_vocabulary_four_fields(self, vocabulary: list[str, str, str, str]) -> None:
         self.cur.execute(
             f"INSERT INTO {self.table_name} (trad, present, preterit, participe_passe) VALUES( ?, ?, ?, ?)", vocabulary,)
         self.con.commit()
