@@ -8,7 +8,7 @@ class Table():
         self.con = sqlite3.connect(str(self.name_db))
         self.cur = self.con.cursor()
         self.cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
-        self.table_name = self.cur.fetchall()[0][0]
+        self.table_name : str = self.cur.fetchall()[0][0]
         self.cur.execute(
             f"""CREATE TABLE IF NOT EXISTS {self.table_name} (id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                         trad VARCHAR(100),
@@ -32,8 +32,8 @@ class Table():
             )
             self.con.commit()
 
-    def update_isfound(self, value :int, where :int) -> None:
-        self.cur.execute(f"UPDATE {self.table_name} SET is_found = {value} WHERE id = ?", where)
+    def update_isfound_1(self, where :int) -> None:
+        self.cur.execute(f"UPDATE {self.table_name} SET is_found = 1 WHERE id = {where}")
 
     def select_isfound(self, is_found_value: int) -> list:  
         self.cur.execute(
@@ -53,6 +53,5 @@ class Table():
 
 if __name__ == '__main__':
     a = Table('./vocabulary/english/verbesirr.db')
-    b = [i[1] for i in a.select_columns()[1:-1]]
-    print(b)
+    print(type(a.table_name))
     

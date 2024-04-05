@@ -105,7 +105,7 @@ def save_data_and_reset_fields(entry_list) -> None:
 
 nb_questions = 0
 def exercice() -> None:
-    global table_exercice, fields_of_exercice
+    global table_exercice, fields_of_exercice, label_is_the_last_word_good_or_not
     # print(selected_file)
     if selected_file != '[no selected file]':
         table_exercice = db.Table(fr".\vocabulary\{selected_file}") # * to have the whole path
@@ -115,6 +115,8 @@ def exercice() -> None:
     words = table_exercice.select_isfound(0)
     shuffle(words)
     exo_choose_a_word_and_make_a_field_readonly(table=table_exercice, fields=fields_of_exercice)
+    label_is_the_last_word_good_or_not = tk.Label(fenetre, text='')
+    label_is_the_last_word_good_or_not.pack()
 
 def exo_on_enter(event, entry_list: list[tk.Entry], index) -> None:
     if index + 1 < len(entry_list):
@@ -122,6 +124,7 @@ def exo_on_enter(event, entry_list: list[tk.Entry], index) -> None:
             try :
                 if entry_list[index + 1]["state"] != "readonly":
                     entry_list[index + 1].focus_set()
+                    
                 
                 elif entry_list[index + 1]["state"] == "readonly":
                     entry_list[index + 2].focus_set()
@@ -154,12 +157,17 @@ def exo_save_data_and_reset_fields(entry_list) -> None:
         print("c'est bon")
         print(words[0][0])
         print(type(words[0][0]))
-        table_exercice.update_isfound(value=1, where=words[0][0])
+        table_exercice.update_isfound_1(where=int(words[0][0]))
+        label_is_the_last_word_good_or_not.configure(text='good', bg='green')
+        label_is_the_last_word_good_or_not.update()
     else :
         print("pabon, cetait :")
         print(words[0][1:len(words)-1])
         print("tu a mis")
         print(data)
+        label_is_the_last_word_good_or_not.configure(text=f'false, it was {voc_of_first_line_of_words}', bg='red')
+        label_is_the_last_word_good_or_not.update()
+
     for entry in entry_list:
         entry.delete(0, tk.END)
     entry_list[0].focus_set()
