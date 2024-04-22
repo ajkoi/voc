@@ -76,12 +76,12 @@
 # root.mainloop()
 
 
-def a():
-    ta = 'ttot'
-    def b():
-        print(ta)
-        bqds = 'tre'
-    def c():
-        print('test')
-    b()
-a()
+def t(f):
+    print("manger", f)
+
+
+@t
+def ttt(a2):
+    print(a2)
+
+ttt(453)

@@ -9,7 +9,7 @@ from time import time
 #! Important fonctions (often used)
 def quit_application() -> None:
     fenetre.destroy()
-def tout_detruire() -> None:  # pour detruire tout ce quil y a dans la fenetre (hormis le menu)
+def destroy_everything() -> None:  # pour detruire tout ce quil y a dans la fenetre (hormis le menu)
     fenetre.unbind('<Return>')
 
     for widget in fenetre.winfo_children():
@@ -17,7 +17,7 @@ def tout_detruire() -> None:  # pour detruire tout ce quil y a dans la fenetre (
         if widget not in [barre_menu]:
             widget.destroy()
 def return_to_homepage() -> None:
-    tout_detruire()
+    destroy_everything()
 
     button_select_table = tk.Button(fenetre, command=select_table, text="select table")
     button_exercice = tk.Button(fenetre, command=exercice, text="start the exercise")
@@ -28,7 +28,7 @@ def return_to_homepage() -> None:
 
 #! Table selection
 def select_table() -> None:
-    tout_detruire()
+    destroy_everything()
     confirm_btn = tk.Button(fenetre, text="Confirm selection", command=confirm_selection)
     confirm_btn.pack(side=tk.BOTTOM, pady=10)
     scrollbar = ttk.Scrollbar(fenetre, orient="vertical")
@@ -70,7 +70,7 @@ def on_enter(event, entry_list: list[tk.Entry], index) -> None:
 
 def create_form(root, fields) -> list:
     """Crée le formulaire avec les champs de saisie."""
-    tout_detruire()
+    destroy_everything()
     entry_list = []
     for index, field in enumerate(fields):
         label = tk.Label(root, text=field)
@@ -136,7 +136,7 @@ def exo_on_enter(event, entry_list: list[tk.Entry], index) -> None:
 
 def exo_create_form(root, fields) -> list:
     """Crée le formulaire avec les champs de saisie."""
-    tout_detruire()
+    destroy_everything()
     entry_list = []
     for index, field in enumerate(fields):
         label = tk.Label(root, text=field)
@@ -173,7 +173,7 @@ def exo_save_data_and_reset_fields(entry_list) -> None:
     entry_list[0].focus_set()
     exo_choose_a_word_and_make_a_field_readonly(table=table_exercice, fields=fields_of_exercice)
 
-def exo_choose_a_word_and_make_a_field_readonly(table: db.Table, fields : list[tk.Entry]):
+def exo_choose_a_word_and_make_a_field_readonly(table: db.Table, fields : list[tk.Entry]): 
     global words, nb_questions
     for field in fields:
         if field["state"] == "readonly":
@@ -182,19 +182,20 @@ def exo_choose_a_word_and_make_a_field_readonly(table: db.Table, fields : list[t
         entry.delete(0, tk.END)
     nb_questions +=1
     words = table.select_isfound(0)
-    shuffle(words)
-    which_word_is_show = randint(1, len(words[0])-2)
-    fields[which_word_is_show-1].insert(0, words[0][which_word_is_show]) # we need to take -1 because
-    fields[which_word_is_show-1].configure(state="readonly") # the fields start at 0
+    if table.select_isfound:
+        shuffle(words)
+        which_word_is_show = randint(1, len(words[0])-2)
+        fields[which_word_is_show-1].insert(0, words[0][which_word_is_show]) # we need to take -1 because
+        fields[which_word_is_show-1].configure(state="readonly") # the fields start at 0
+    else:
+        end_of_exercise()
+
+def end_of_exercise():
+    destroy_everything()
 
 
 
 
-            
-
-        
-
-    
 
 if __name__ == "__main__":
     
