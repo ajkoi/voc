@@ -14,10 +14,10 @@ class Table():
             self.table_name : str = self.cur.fetchall()[0][0]
         self.cur.execute(
             f"""CREATE TABLE IF NOT EXISTS {self.table_name} (id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                        trad VARCHAR(100),
-                        present VARCHAR(100),
-                        preterit VARCHAR(100), 
-                        participe_passe VARCHAR(100),
+                        trad VARCHAR(30),
+                        present VARCHAR(30),
+                        preterit VARCHAR(30), 
+                        participe_passe VARCHAR(30),
                         is_found INTEGER DEFAULT(0))""")
 
         self.con.commit()

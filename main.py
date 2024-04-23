@@ -198,7 +198,6 @@ def end_of_exercise():
 
 
 
-
 if __name__ == "__main__":
     
     fenetre = tk.Tk()
