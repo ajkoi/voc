@@ -135,7 +135,7 @@ def exo_on_enter(event, entry_list: list[tk.Entry], index) -> None:
         exo_save_data_and_reset_fields(entry_list)
 
 def exo_create_form(root, fields) -> list:
-    """Crée le formulaire avec les champs de saisie."""
+    #Crée le formulaire avec les champs de saisie.
     destroy_everything()
     entry_list = []
     for index, field in enumerate(fields):
@@ -150,7 +150,7 @@ def exo_create_form(root, fields) -> list:
 
     return entry_list
 def exo_save_data_and_reset_fields(entry_list) -> None:
-    global data
+    # global data
     data = [entry.get() for entry in entry_list]
     voc_of_first_line_of_words = [word for word in words[0][1:len(words)-1]]
     if data == voc_of_first_line_of_words:
@@ -162,7 +162,7 @@ def exo_save_data_and_reset_fields(entry_list) -> None:
         label_is_the_last_word_good_or_not.update()
     else :
         print("pabon, cetait :")
-        print(words[0][1:len(words)-1])
+        print(voc_of_first_line_of_words)
         print("tu a mis")
         print(data)
         label_is_the_last_word_good_or_not.configure(text=f'false, it was {voc_of_first_line_of_words}', bg='red')
@@ -182,7 +182,7 @@ def exo_choose_a_word_and_make_a_field_readonly(table: db.Table, fields : list[t
         entry.delete(0, tk.END)
     nb_questions +=1
     words = table.select_isfound(0)
-    if table.select_isfound:
+    if words:
         shuffle(words)
         which_word_is_show = randint(1, len(words[0])-2)
         fields[which_word_is_show-1].insert(0, words[0][which_word_is_show]) # we need to take -1 because
@@ -192,6 +192,8 @@ def exo_choose_a_word_and_make_a_field_readonly(table: db.Table, fields : list[t
 
 def end_of_exercise():
     destroy_everything()
+    print(r"c'est la fin")
+    del words, nb_questions, table_exercice
 
 
 

@@ -3,12 +3,15 @@ import sqlite3
 #all comands for the database
 
 class Table():
-    def __init__(self, database_path: str) -> None:
+    def __init__(self, database_path: str, *args) -> None:
         self.name_db = database_path
         self.con = sqlite3.connect(str(self.name_db))
         self.cur = self.con.cursor()
-        self.cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
-        self.table_name : str = self.cur.fetchall()[0][0]
+        if args:
+            self.table_name :str = args[0]
+        else:
+            self.cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
+            self.table_name : str = self.cur.fetchall()[0][0]
         self.cur.execute(
             f"""CREATE TABLE IF NOT EXISTS {self.table_name} (id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                         trad VARCHAR(100),
@@ -16,6 +19,7 @@ class Table():
                         preterit VARCHAR(100), 
                         participe_passe VARCHAR(100),
                         is_found INTEGER DEFAULT(0))""")
+
         self.con.commit()
 
 
@@ -45,6 +49,8 @@ class Table():
         self.cur.execute(
             f"INSERT INTO {self.table_name} (trad, present, preterit, participe_passe) VALUES( ?, ?, ?, ?)", vocabulary,)
         self.con.commit()
+    def add_voc(self, vocabulary: dict) -> None:
+        colomns = 'a'
     
     def select_columns(self) -> list:
         self.cur.execute(f"PRAGMA table_info({self.table_name})")
@@ -52,6 +58,6 @@ class Table():
 
 
 if __name__ == '__main__':
-    a = Table('./vocabulary/english/verbesirr.db')
-    print(type(a.table_name))
-    
+    a = Table('./vocabulary/tests/a_short_table.db', 'mang')
+    # a.add_vocabulary_four_fields(['ok', 'cest', 'bien', 'uii'])
+    print(a.select_isfound(is_found_value=0))
