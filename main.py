@@ -102,7 +102,6 @@ def save_data_and_reset_fields(entry_list) -> None:
 #! EXERCISE
 #! EXERCISE
     
-
 nb_questions = 0
 def exercice() -> None:
     global table_exercice, fields_of_exercice, label_is_the_last_word_good_or_not
@@ -165,7 +164,7 @@ def exo_save_data_and_reset_fields(entry_list) -> None:
         print(voc_of_first_line_of_words)
         print("tu a mis")
         print(data)
-        label_is_the_last_word_good_or_not.configure(text=f'false, it was {voc_of_first_line_of_words}', bg='red')
+        label_is_the_last_word_good_or_not.configure(text=f'wrong, it was {voc_of_first_line_of_words}', bg='red')
         label_is_the_last_word_good_or_not.update()
 
     for entry in entry_list:
@@ -182,6 +181,7 @@ def exo_choose_a_word_and_make_a_field_readonly(table: db.Table, fields : list[t
         entry.delete(0, tk.END)
     nb_questions +=1
     words = table.select_isfound(0)
+    print(words)
     if words:
         shuffle(words)
         which_word_is_show = randint(1, len(words[0])-2)
@@ -193,7 +193,6 @@ def exo_choose_a_word_and_make_a_field_readonly(table: db.Table, fields : list[t
 def end_of_exercise():
     destroy_everything()
     print(r"c'est la fin")
-    del words, nb_questions, table_exercice
 
 
 
