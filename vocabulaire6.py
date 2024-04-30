@@ -142,10 +142,9 @@ while True :
                     dicf.update(voc2)
           if a == str(4):
                     dicf.update(test)
-          if a == str(0):
+          else:
                     break
-          if a == str():
-                    break
+
                     
           if input(str('1 = fra=>autre langue, 2 = autre langue => fra'))== str(1):
                     debut = time()

@@ -26,7 +26,7 @@ def return_to_homepage() -> None:
     label_selected_file.grid(row=0, column=0)
     button_exercice.grid(row=2, column=0)
 
-#! Table selection
+#! Table selection 
 def select_table() -> None:
     destroy_everything()
     confirm_btn = tk.Button(fenetre, text="Confirm selection", command=confirm_selection)
@@ -77,7 +77,6 @@ def create_form(root, fields) -> list:
         label.pack()
         entry = tk.Entry(root)
         entry.pack()
-        # Bind la touche Entrée à l'action on_enter pour chaque champ
         entry.bind("<Return>", lambda event, entry_list=entry_list, index=index: on_enter(event, entry_list, index))
         entry_list.append(entry)
 
@@ -87,7 +86,6 @@ def create_form(root, fields) -> list:
 def save_data_and_reset_fields(entry_list) -> None:
 
 
-    """Enregistre les données et réinitialise tous les champs."""
     global data
     data = [entry.get() for entry in entry_list]
     print("Données enregistrées :", data)
@@ -101,10 +99,10 @@ def save_data_and_reset_fields(entry_list) -> None:
 #! EXERCISE
 #! EXERCISE
 #! EXERCISE
-    
 nb_questions = 0
 def exercice() -> None:
-    global table_exercice, fields_of_exercice, label_is_the_last_word_good_or_not
+    global table_exercice, fields_of_exercice, label_is_the_last_word_good_or_not, start_time
+    start_time = time()
     # print(selected_file)
     if selected_file != '[no selected file]':
         table_exercice = db.Table(fr".\vocabulary\{selected_file}") # * to have the whole path
@@ -151,11 +149,8 @@ def exo_create_form(root, fields) -> list:
 def exo_save_data_and_reset_fields(entry_list) -> None:
     # global data
     data = [entry.get() for entry in entry_list]
-    voc_of_first_line_of_words = [word for word in words[0][1:len(words)-1]]
+    voc_of_first_line_of_words = [word for word in words[0][1:len(words[0])]]
     if data == voc_of_first_line_of_words:
-        print("c'est bon")
-        print(words[0][0])
-        print(type(words[0][0]))
         table_exercice.update_isfound_1(where=int(words[0][0]))
         label_is_the_last_word_good_or_not.configure(text='good', bg='green')
         label_is_the_last_word_good_or_not.update()
@@ -179,11 +174,11 @@ def exo_choose_a_word_and_make_a_field_readonly(table: db.Table, fields : list[t
             field.configure(state='normal')
     for entry in fields:
         entry.delete(0, tk.END)
-    nb_questions +=1
     words = table.select_isfound(0)
     print(words)
+    shuffle(words)
     if words:
-        shuffle(words)
+        nb_questions +=1
         which_word_is_show = randint(1, len(words[0])-2)
         fields[which_word_is_show-1].insert(0, words[0][which_word_is_show]) # we need to take -1 because
         fields[which_word_is_show-1].configure(state="readonly") # the fields start at 0
@@ -192,9 +187,12 @@ def exo_choose_a_word_and_make_a_field_readonly(table: db.Table, fields : list[t
 
 def end_of_exercise():
     destroy_everything()
-    print(r"c'est la fin")
+    label_number_of_questions = tk.Label(fenetre, text=f"nombre d'éssais au total : {nb_questions}")
+    label_time = tk.Label(fenetre, text=f"time = {time()-start_time}")
+    label_number_of_questions.grid(row=0, column=0)
+    label_time.grid(row=1, column=1)
 
-
+    print("c'est la fin")
 
 
 if __name__ == "__main__":
