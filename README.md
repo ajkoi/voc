@@ -1,8 +1,6 @@
 # To learn irregular verbs (now only french - english)
 Documentation only in french
-
-# USE THE `mainv1.py` because its the only one who works now
-
+# nothing works now 😞
 ## coming soon : 
 
 german irregular verbs and
