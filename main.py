@@ -8,12 +8,13 @@ from time import time
 
 #! Important fonctions (often used)
 def quit_application() -> None:
+    """Quit."""
     fenetre.destroy()
-def destroy_everything() -> None:  # pour detruire tout ce quil y a dans la fenetre (hormis le menu)
+def destroy_everything() -> None:
+    """Destroy everything except the menu"""
     fenetre.unbind('<Return>')
 
     for widget in fenetre.winfo_children():
-
         if widget not in [barre_menu]:
             widget.destroy()
 def return_to_homepage() -> None:
