@@ -11,9 +11,23 @@ class exo:
             pass
 
     def choose_line(self):
-        return self.data[randint(1, len(self.data) - 1)]
+        return (lambda rand: (self.data[rand], rand))(randint(1, len(self.data) - 1))
 
     def exercice(self):
+        print(
+            "mettre une virgule et un espace entre chaque mot (et les mettre dans l'ordre)"
+        )
         while len(self.data) > 1:
-            self.to_guess = self.choose_line()
-            self.which = randint(0, len(self.to_guess))
+            to_guess, line = self.choose_line()
+            which = randint(0, len(to_guess) - 1)
+            print(f"Quel sont les autres formes de {to_guess[which]} ?")
+            answer = input().split(", ")
+            answer = answer[0:which] + to_guess[which] + answer[which:]
+            if answer == to_guess:
+                print("C'est bon")
+                del self.data[line]
+                self.found += to_guess
+
+
+if __name__ == "__main__":
+    a = exo(path="")
