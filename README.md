@@ -1,10 +1,10 @@
-# To learn irregular verbs (now only french - english)
-Documentation only in french
-# nothing works now 😞
-## coming soon : 
+# To learn things
 
-german irregular verbs and
-other vocabulary (words)
+## now in the database, only german irregular verbs.
 
 
-### you need sqlite3, os, randint and tkinter python modules
+## Feel free to add things and open a pull request.
+
+
+> [!WARNING]  
+> Now only cli working for now.
