@@ -30,4 +30,4 @@ class exo:
 
 
 if __name__ == "__main__":
-    a = exo(path="")
+    a = exo(path="./vocabulary/csv/allemand/verbes-forts.csv")
