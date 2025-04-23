@@ -6,16 +6,19 @@ class exo:
     def __init__(self, **kwargs):
         if "path" in kwargs.keys():
             self.data = csv.Data(kwargs["path"])
+            self.not_found = self.data.data
             self.found = []
         else:
             pass
 
     def choose_line(self):
-        return (lambda rand: (self.data[rand], rand))(randint(1, len(self.data) - 1))
+        return (lambda rand: (self.not_found[rand], rand))(
+            randint(1, len(self.not_found) - 1)
+        )
 
     def exercice(self):
         print(
-            "mettre une virgule et un espace entre chaque mot (et les mettre dans l'ordre)"
+            "mettre une virgule et un espace entre chaque mot (et les mettre dans l'ordre) les ß"
         )
         while len(self.data) > 1:
             to_guess, line = self.choose_line()
@@ -25,7 +28,7 @@ class exo:
             answer = answer[0:which] + to_guess[which] + answer[which:]
             if answer == to_guess:
                 print("C'est bon")
-                del self.data[line]
+                del self.not_found[line]
                 self.found += to_guess
 
 
