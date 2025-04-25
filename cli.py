@@ -18,7 +18,7 @@ class exo:
 
     def exercice(self):
         print(
-            "mettre une virgule et un espace entre chaque mot (et les mettre dans l'ordre) les ß"
+            "Mettre une virgule et un espace entre chaque mot (et les mettre dans l'ordre) les ß"
         )
         while len(self.data) > 1:
             to_guess, line = self.choose_line()
@@ -30,6 +30,8 @@ class exo:
                 print("C'est bon")
                 del self.not_found[line]
                 self.found += to_guess
+            else:
+                print(f"Faux, la réponse était {to_guess}\nTu as mis {answer}")
 
 
 if __name__ == "__main__":
