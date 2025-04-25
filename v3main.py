@@ -15,7 +15,7 @@ class fenetre:
         self.menu_fichier = tk.Menu(self.barre_menu, tearoff=0)
         self.barre_menu.add_cascade(label="options", menu=self.menu_fichier)
         self.menu_fichier.add_command(label="select table", command=self.select_table)
-        # self.menu_fichier.add_command(label="exercice", command=self.exercice)
+        # self.menu_fichier.add_command(label="exercise", command=self.exercice)
         # menu_fichier.add_command(label="afficher voc", command=afficher_table)
         # menu_fichier.add_command(label="ajouter voc", command=ajouter_voc)
         self.menu_fichier.add_separator()
@@ -23,7 +23,7 @@ class fenetre:
         self.return_to_homepage()
         # self.self.main.config(menu=self.barre_menu)
         self.test = tk.LabelFrame(self.main, text="manfge")
-        self.test.pack()
+        # self.test.pack()
         self.main.mainloop()
 
     def quit_application(self) -> None:
@@ -43,8 +43,8 @@ class fenetre:
         self.button_select_table = tk.Button(
             self.main, command=self.select_table, text="select table"
         )
-        self.button_exercice = tk.Button(
-            self.main, command=self.exercice, text="start the exercise"
+        self.button_exercise = tk.Button(
+            self.main, command=self.exercise, text="start the exercise"
         )
         self.label_selected_file = tk.Label(
             self.main,
@@ -53,7 +53,7 @@ class fenetre:
         )
         self.button_select_table.grid(row=1, column=0)
         self.label_selected_file.grid(row=0, column=0)
-        self.button_exercice.grid(row=2, column=0)
+        self.button_exercise.grid(row=2, column=0)
 
     def select_table(self) -> None:
         self.destroy_everything()
@@ -80,6 +80,9 @@ class fenetre:
             self.return_to_homepage()
         else:
             messagebox.showwarning("warning", "please select a database")
+
+    def exercise(self):
+        print("manger")
 
 
 if __name__ == "__main__":

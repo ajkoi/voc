@@ -1,5 +1,6 @@
 import csv_database as csv
 from random import randint
+from time import time
 
 
 class exo:
@@ -20,19 +21,26 @@ class exo:
         print(
             "Mettre une virgule et un espace entre chaque mot (et les mettre dans l'ordre) les ß"
         )
-        while len(self.data) > 1:
+        time_start = time()
+        while len(self.data.data) > 1:
             to_guess, line = self.choose_line()
             which = randint(0, len(to_guess) - 1)
             print(f"Quel sont les autres formes de {to_guess[which]} ?")
             answer = input().split(", ")
-            answer = answer[0:which] + to_guess[which] + answer[which:]
+            answer = answer[0:which] + [to_guess[which]] + answer[which:]
             if answer == to_guess:
                 print("C'est bon")
                 del self.not_found[line]
                 self.found += to_guess
             else:
                 print(f"Faux, la réponse était {to_guess}\nTu as mis {answer}")
+                del self.data.data[line]
+                self.found += to_guess
+        print(
+            f"Tu as fini, tu as tout trouvé en {round(time() - time_start, 1)} secondes."
+        )
 
 
 if __name__ == "__main__":
-    a = exo(path="")
+    a = exo(path="./vocabulary/csv/allemand/verbes-forts.csv")
+    a.exercice()

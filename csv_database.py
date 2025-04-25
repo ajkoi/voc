@@ -10,6 +10,7 @@ class Data:
                 self.data = [i.split(",") for i in file.read().split("\n")]
                 del self.data[-1]
                 self.titles = self.data[0]
+                self.data = [i.split(",") for i in file.read().split("\n")][:-1]
         else:
             pass
 
