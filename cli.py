@@ -34,11 +34,7 @@ class exo:
                 self.found += to_guess
             else:
                 print(f"Faux, la réponse était {to_guess}\nTu as mis {answer}")
-                del self.data.data[line]
-                self.found += to_guess
-        print(
-            f"Tu as fini, tu as tout trouvé en {round(time() - time_start, 1)} secondes."
-        )
+        print(f"Tu as fini, tu as trouvé en {round(time() - time_start, 1)} secondes.")
 
 
 if __name__ == "__main__":
