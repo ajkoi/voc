@@ -1,6 +1,6 @@
 import sqlite3
 
-#all comands for the database
+#all comands for the database (sql)
 
 class Table():
     def __init__(self, database_path: str, *args) -> None:

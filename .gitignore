@@ -1,10 +1,9 @@
 mainv2.py
 __pycache__
-t.py
 \.vs
 \.vscode
 a_short_table.db-journal
 vocabulaire.py
 vocabulaire6.py
 tests.py
-
+.python-version
