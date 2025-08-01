@@ -14,7 +14,7 @@ def quit_application() -> None:
 
 
 def destroy_everything() -> None:
-    """Destroy everything except the menu"""
+    """Destroy everything except the menu to show a now page"""
     fenetre.unbind("<Return>")
 
     for widget in fenetre.winfo_children():
