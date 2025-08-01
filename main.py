@@ -9,7 +9,7 @@ from time import time
 
 #! Important fonctions (often used)
 def quit_application() -> None:
-    """Quit."""
+    """Quit and destroy"""
     fenetre.destroy()
 
 
