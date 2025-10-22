@@ -19,9 +19,10 @@ class exo:
 
     def exercice(self):
         print(
-            "Mettre une virgule et un espace entre chaque mot (et les mettre dans l'ordre) les ß"
+            "Mettre une virgule et un espace entre chaque mot (et les mettre dans l'ordre) les ß sont à remplacer par deux s"
         )
         time_start = time()
+        print(self.data.data)
         while len(self.data.data) > 1:
             to_guess, line = self.choose_line()
             which = randint(0, len(to_guess) - 1)
