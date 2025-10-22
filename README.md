@@ -1,7 +1,7 @@
 # To learn things
 
 ## Now in the database
-- german irregular verbs. (on csv)
+- german irregular verbs. (on csv/)
 
 
 ## Feel free to add things and open a pull request.
